@@ -1,0 +1,138 @@
+# Epics and Stories for Chess Web App
+
+## MVP Epics
+
+- Epic: Chess Game Logic
+  - Story: Prevent illegal moves
+    - Acceptance Criteria:
+      - Given a chessboard in a valid state, when a user attempts an illegal move (e.g., moving a pinned piece), then the move is blocked and an error message is displayed.
+      - Given a knight, when attempting to jump over pieces, then the move is allowed.
+    - Technical Requirements:
+      - Integrate chess.js library for move validation.
+      - Implement client-side checks before sending moves to backend.
+  - Story: Handle special rules (castling, en passant, pawn promotion)
+    - Acceptance Criteria:
+      - Given castling conditions are met, when the king is moved two squares, then the rook moves accordingly.
+      - Given an en passant opportunity, when the pawn captures diagonally, then the opponent's pawn is removed.
+      - Given a pawn reaches the eighth rank, when promoted, then the user selects a piece (queen, rook, etc.).
+    - Technical Requirements:
+      - Use chess.js to handle special moves automatically.
+      - Add UI modal for pawn promotion selection.
+  - Story: Detect check, checkmate, and stalemate
+    - Acceptance Criteria:
+      - Given the king is under attack, when the turn ends, then "Check" is displayed.
+      - Given the king is in check with no legal moves, then "Checkmate" is displayed and the game ends.
+      - Given no legal moves and king not in check, then "Stalemate" is displayed and the game ends.
+    - Technical Requirements:
+      - Leverage chess.js methods like inCheck(), isCheckmate(), isStalemate().
+      - Update UI state and display alerts on game state changes.
+  - Story: Detect draws by insufficient material or 50-move rule
+    - Acceptance Criteria:
+      - Given only kings remain, then a draw is declared.
+      - Given 50 moves without pawn advance or capture, then a draw is declared.
+    - Technical Requirements:
+      - Use chess.js for insufficient material detection.
+      - Track move history to enforce 50-move rule.
+
+- Epic: User Interface and Responsiveness
+  - Story: Provide instant board response to interactions
+    - Acceptance Criteria:
+      - Given a user clicks or drags a piece, when the action is valid, then the board updates within 100ms.
+      - Given an invalid move, then feedback is immediate without delay.
+    - Technical Requirements:
+      - Use React with optimized rendering for <100ms updates.
+      - Implement drag-and-drop with react-dnd or similar.
+  - Story: Display clean, high-contrast chessboard
+    - Acceptance Criteria:
+      - Given the app loads, then the board shows alternating colors with clear piece icons.
+      - Given no 3D graphics, then pieces are simple and recognizable.
+    - Technical Requirements:
+      - Use react-chessboard for board rendering.
+      - Apply Seahawks colors: dark navy (#002244), light green (#69BE28).
+  - Story: Show visual cues for last move and valid squares
+    - Acceptance Criteria:
+      - Given a move is made, then the last moved piece is highlighted.
+      - Given a piece is selected, then valid destination squares are highlighted.
+    - Technical Requirements:
+      - Customize react-chessboard to highlight squares.
+      - Use CSS for highlights and animations.
+  - Story: Indicate current turn
+    - Acceptance Criteria:
+      - Given it's white's turn, then a white indicator is shown.
+      - Given it's black's turn, then a black indicator is shown.
+    - Technical Requirements:
+      - Display turn indicator in UI state.
+  - Story: Enable guest access without registration
+    - Acceptance Criteria:
+      - Given the app is opened, when no login is required, then a new game starts immediately.
+    - Technical Requirements:
+      - No authentication required; initialize game on load.
+
+## Post-MVP Epics
+
+- Epic: Functional Tools
+  - Story: Display move history in PGN format
+    - Acceptance Criteria:
+      - Given moves are made, then a list of moves in PGN is shown in a sidebar.
+    - Technical Requirements:
+      - Use chess.js to generate PGN history.
+      - Display in a React component sidebar.
+  - Story: Export game moves
+    - Acceptance Criteria:
+      - Given the game ends, when export is clicked, then a PGN file is downloaded.
+    - Technical Requirements:
+      - Implement file download using JavaScript blob API.
+  - Story: Integrate adjustable AI difficulty with Stockfish
+    - Acceptance Criteria:
+      - Given Stockfish is integrated, when difficulty is selected, then AI moves adjust accordingly.
+    - Technical Requirements:
+      - Integrate Stockfish.js for AI moves.
+      - Adjust search depth or time based on difficulty.
+  - Story: Adjust AI opponent rating
+    - Acceptance Criteria:
+      - Given a rating range (e.g., 800-2800), when selected, then AI strength matches the rating.
+    - Technical Requirements:
+      - Map rating to Stockfish parameters (e.g., Elo rating simulation).
+  - Story: Add undo button for move reversals
+    - Acceptance Criteria:
+      - Given a move is made, when undo is clicked, then the last move is reverted.
+    - Technical Requirements:
+      - Use chess.js undo() method.
+      - Add undo button in UI.
+
+- Epic: Advanced UX
+  - Story: Implement real-time multiplayer via WebSockets
+    - Acceptance Criteria:
+      - Given two players connect, when one moves, then the other sees it instantly.
+    - Technical Requirements:
+      - Use Socket.io for WebSocket communication.
+      - Sync game state between clients.
+  - Story: Enable local multiplayer with board flipping
+    - Acceptance Criteria:
+      - Given local multiplayer mode, when turns alternate, then the board flips for each player.
+    - Technical Requirements:
+      - Implement board rotation in react-chessboard.
+      - Alternate perspective on turn change.
+  - Story: Add analyze feature using Stockfish
+    - Acceptance Criteria:
+      - Given a game position, when analyze is selected, then Stockfish provides evaluation and best moves.
+    - Technical Requirements:
+      - Integrate Stockfish for position analysis.
+      - Display evaluation in UI.
+
+- Epic: Game Timing
+  - Story: Implement physical chess timer for time limits
+    - Acceptance Criteria:
+      - Given a time control (e.g., 10 minutes), when the game starts, then timers count down.
+      - Given a player's time runs out, then they lose the game.
+    - Technical Requirements:
+      - Use JavaScript timers or a library like react-timer-hook.
+      - End game when time expires.
+
+- Epic: UI Theming
+  - Story: Add Kawaii theme option for game UI
+    - Acceptance Criteria:
+      - Given the theme is selected, then pieces and UI elements change to Kawaii style (cute, colorful).
+    - Technical Requirements:
+      - Implement CSS variables for themes.
+      - Switch stylesheets or classes for Kawaii theme.
