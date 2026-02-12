@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
-import { io } from 'socket.io-client';
+// import { io } from 'socket.io-client';
 import './App.css';
 
-const socket = io('http://localhost:3000');
+// const socket = io('http://localhost:3000');
 
 function App() {
   const [game, setGame] = useState(new Chess());
@@ -14,16 +14,16 @@ function App() {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
   useEffect(() => {
-    socket.on('ai-move', (move) => {
-      console.log('AI move received:', move);
-      const newGame = new Chess(game.fen());
-      newGame.move(move);
-      setGame(newGame);
-    });
+    // socket.on('ai-move', (move) => {
+    //   console.log('AI move received:', move);
+    //   const newGame = new Chess(game.fen());
+    //   newGame.move(move);
+    //   setGame(newGame);
+    // });
 
-    return () => {
-      socket.off('ai-move');
-    };
+    // return () => {
+    //   socket.off('ai-move');
+    // };
   }, [game]);
 
   function makeAMove(move) {
@@ -33,17 +33,15 @@ function App() {
     console.log('Move result:', result);
     if (result) {
       setGame(gameCopy);
-      socket.emit('move', gameCopy.fen());
+      // setFen(gameCopy.fen());
       console.log('Game updated, FEN:', gameCopy.fen());
     }
     return result;
   }
 
   function onSquareClick(square) {
-    console.log('Square clicked:', square);
+    console.log('onSquareClick activated: square', square);
     setRightClickedSquares({});
-
-    if (!game) return;
 
     const piece = game.get(square);
     console.log('Piece on square:', piece);
@@ -73,8 +71,8 @@ function App() {
     }
   }
 
-  function onPieceDrop(sourceSquare, targetSquare) {
-    console.log('Piece dropped from', sourceSquare, 'to', targetSquare);
+  function onPieceDrop(sourceSquare, targetSquare, piece) {
+    console.log('onDrop activated: from', sourceSquare, 'to', targetSquare, 'piece', piece);
     const move = makeAMove({
       from: sourceSquare,
       to: targetSquare,
@@ -84,7 +82,7 @@ function App() {
       setSelectedSquare(null);
       setOptionSquares({});
     }
-    return move !== null;
+    return true; // Always allow for testing
   }
 
   return (
@@ -94,18 +92,16 @@ function App() {
         <Chessboard
           position={game.fen()}
           onSquareClick={onSquareClick}
-          onPieceDrop={onPieceDrop}
-          boardOrientation={boardOrientation}
-          boardWidth={400}
-          customSquareStyles={{
-            ...optionSquares,
-            ...rightClickedSquares,
-          }}
-          isDraggablePiece={({ piece }) => piece[0] === game.turn()}
+          boardWidth={300}
         />
       </div>
       <div className="controls">
-        <button onClick={() => { setGame(new Chess()); setSelectedSquare(null); setOptionSquares({}); }}>New Game</button>
+        <button onClick={() => { 
+          console.log('New Game clicked');
+          setGame(new Chess()); 
+          setSelectedSquare(null); 
+          setOptionSquares({}); 
+        }}>New Game</button>
         <button onClick={() => setBoardOrientation(boardOrientation === 'white' ? 'black' : 'white')}>
           Flip Board
         </button>

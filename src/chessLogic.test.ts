@@ -42,9 +42,8 @@ describe('Chess Game Logic', () => {
   it('should handle en passant', () => {
     const game = new Chess();
     game.move('e4');
-    game.move({ from: 'g1', to: 'f3' });
     game.move('e5');
-    game.move('d5');
+    game.move('d4');
     game.move({ from: 'e5', to: 'd6' }); // En passant
     expect(game.get('d6')?.type).toBe('p');
   });
