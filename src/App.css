@@ -40,3 +40,25 @@ p {
   font-size: 18px;
   margin: 10px 0;
 }
+
+.check-warning {
+  color: #FF0000;
+  font-weight: bold;
+  font-size: 24px;
+  animation: pulse 1s infinite;
+}
+
+.game-over {
+  color: #69BE28;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
